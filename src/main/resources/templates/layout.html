@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <title>Oauth Register Broker Dashboard</title>
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon"/>
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon"/>
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <link href="/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body>
+<div id="wrapper">
+    <nav class="white " role="navigation">
+        <div class="nav-wrapper container "><a id="logo-container" href="/" class="brand-logo">
+            <img src="/images/logo.png"/> Oauth Register Broker
+        </a>
+            <ul class="right hide-on-med-and-down">
+                <li><a href="/">Show Registered Apps</a></li>
+
+            </ul>
+
+            <ul id="nav-mobile" class="side-nav">
+                <li><a href="/">Show Registered Apps</a></li>
+            </ul>
+            <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+        </div>
+    </nav>
+    <div layout:fragment="banner"></div>
+
+    <div class="container">
+        <div layout:fragment="content"></div>
+    </div>
+
+    <footer class="page-footer blue-grey">
+        <div class="footer-copyright">
+            <div class="container">
+                Made by <a class="orange-text text-lighten-3" href="https://github.com/Orange-OpenSource/elpaaso">ElPaaSo
+                Team</a>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<!--  Scripts-->
+<script src="/js/jquery-2.1.4.min.js"></script>
+<script src="/js/materialize.min.js"></script>
+<script src="/js/init.js"></script>
+<div layout:fragment="scripts"></div>
+</body>
+</html>

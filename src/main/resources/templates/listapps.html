@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layout">
+<body>
+<div layout:fragment="content">
+
+    <h5>Registered Apps</h5>
+
+    <!--/*@thymesVar id="bindingsMap" type="java.util.Map<String, java.util.List<com.orange.clara.cloud.oauthregisterbroker.model.OauthRegServiceInstanceBindings>>"*/-->
+    <!--/*@thymesVar id="driverMap" type="java.util.Map<String, com.orange.clara.cloud.oauthregisterbroker.drivers.Driver>"*/-->
+    <div th:if="${bindingsMap == null or bindingsMap.isEmpty()}">
+        <h6>No apps has been registered</h6>
+    </div>
+    <div th:if="${bindingsMap != null and bindingsMap.isEmpty() == false}">
+        <div th:each="listBinding : ${bindingsMap}">
+            <ul class="collection with-header">
+                <li class="collection-header">
+                    <h4 th:text="${listBinding.key}">No name</h4>
+                </li>
+
+                <li class="collection-item"
+                    th:each="binding : ${listBinding.value}">
+                    <h5 th:text="${'Binding id: '+binding.id}">binding</h5>
+                    <a class="waves-effect waves-light btn showcred">Show credentials</a>
+                    <table style="width: 100%; display: none;" class="striped responsive-table bordered">
+                        <thead>
+                        <tr>
+                            <th data-field="key">Key</th>
+                            <th data-field="value">Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td style="width: 40%; font-weight: bold;">Registered on</td>
+                            <td th:text="${driverMap.get(binding.oauthRegServiceInstance.planId).driverName}">none</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 40%; font-weight: bold;">Id</td>
+                            <td th:text="${binding.oauthClient.id}">id</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 40%; font-weight: bold;">Secret</td>
+                            <td th:text="${binding.oauthClient.secret}">secret</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 40%; font-weight: bold;">Access Token Uri</td>
+                            <td th:text="${binding.oauthClient.accessTokenUri}">accessTokenUri</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 40%; font-weight: bold;">User Authorization Uri</td>
+                            <td th:text="${binding.oauthClient.userAuthorizationUri}">userAuthorizationUri</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 40%; font-weight: bold;">User Info Uri</td>
+                            <td th:text="${binding.oauthClient.userInfoUri}">userInfoUri</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 40%; font-weight: bold;">Scopes</td>
+                            <td th:text="${binding.oauthClient.scopes}">scopes</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 40%; font-weight: bold;">Grant Types</td>
+                            <td th:text="${binding.oauthClient.grantTypes}">grantTypes</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

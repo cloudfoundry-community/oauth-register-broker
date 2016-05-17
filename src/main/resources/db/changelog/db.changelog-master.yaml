@@ -1,0 +1,164 @@
+databaseChangeLog:
+- changeSet:
+    id: 1463360370025-1
+    author: arthurhalet
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: false
+            constraints:
+              primaryKey: true
+              nullable: false
+            name: id
+            type: VARCHAR(255)
+        - column:
+            name: access_token_uri
+            type: VARCHAR(255)
+        - column:
+            name: grant_types
+            type: VARCHAR(255)
+        - column:
+            name: scopes
+            type: VARCHAR(255)
+        - column:
+            name: secret
+            type: VARCHAR(255)
+        - column:
+            name: user_authorization_uri
+            type: VARCHAR(255)
+        - column:
+            name: user_info_uri
+            type: VARCHAR(255)
+        - column:
+            name: oauth_reg_service_instance_bindings_id
+            type: VARCHAR(255)
+        tableName: oauth_client
+- changeSet:
+    id: 1463360370025-2
+    author: arthurhalet
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: false
+            constraints:
+              primaryKey: true
+              nullable: false
+            name: service_instance_id
+            type: VARCHAR(255)
+        - column:
+            name: dashboard_url
+            type: VARCHAR(255)
+        - column:
+            name: organization_guid
+            type: VARCHAR(255)
+        - column:
+            name: plan_id
+            type: VARCHAR(255)
+        - column:
+            name: provider_password
+            type: VARCHAR(255)
+        - column:
+            name: provider_username
+            type: VARCHAR(255)
+        - column:
+            name: space_guid
+            type: VARCHAR(255)
+        tableName: oauth_reg_service_instance
+- changeSet:
+    id: 1463360370025-3
+    author: arthurhalet
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: false
+            constraints:
+              primaryKey: true
+              nullable: false
+            name: id
+            type: VARCHAR(255)
+        - column:
+            name: app_guid
+            type: VARCHAR(255)
+        - column:
+            name: oauth_client_id
+            type: VARCHAR(255)
+        - column:
+            name: oauth_reg_service_instance_id
+            type: VARCHAR(255)
+        tableName: oauth_reg_service_instance_bindings
+- changeSet:
+    id: 1463360370025-4
+    author: arthurhalet
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: oauth_client_id
+        indexName: FK_5k890l99pjjdm17q68ast5t6t
+        tableName: oauth_reg_service_instance_bindings
+- changeSet:
+    id: 1463360370025-5
+    author: arthurhalet
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: oauth_reg_service_instance_bindings_id
+        indexName: FK_kfe93xoo21rnnf3yk15t4k68d
+        tableName: oauth_client
+- changeSet:
+    id: 1463360370025-6
+    author: arthurhalet
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: oauth_reg_service_instance_id
+        indexName: FK_ojgqufdrobpvnj6ta83m0u1bn
+        tableName: oauth_reg_service_instance_bindings
+- changeSet:
+    id: 1463360370025-7
+    author: arthurhalet
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: oauth_client_id
+        baseTableName: oauth_reg_service_instance_bindings
+        constraintName: FK_5k890l99pjjdm17q68ast5t6t
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: CASCADE
+        onUpdate: CASCADE
+        referencedColumnNames: id
+        referencedTableName: oauth_client
+- changeSet:
+    id: 1463360370025-8
+    author: arthurhalet
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: oauth_reg_service_instance_bindings_id
+        baseTableName: oauth_client
+        constraintName: FK_kfe93xoo21rnnf3yk15t4k68d
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: oauth_reg_service_instance_bindings
+- changeSet:
+    id: 1463360370025-9
+    author: arthurhalet
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: oauth_reg_service_instance_id
+        baseTableName: oauth_reg_service_instance_bindings
+        constraintName: FK_ojgqufdrobpvnj6ta83m0u1bn
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: service_instance_id
+        referencedTableName: oauth_reg_service_instance
+
