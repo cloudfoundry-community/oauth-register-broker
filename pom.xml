@@ -5,11 +5,11 @@
 
     <groupId>com.orange.clara.cloud</groupId>
     <artifactId>oauth-register-broker</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>war</packaging>
 
     <name>oauth-register-broker</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Automatically register an app to an oauth2 provider in cloud foundry</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -154,8 +154,29 @@
     </dependencyManagement>
     <repositories>
         <repository>
+            <id>jfrog-oss</id>
+            <name>JFrog OSS snapshot repository</name>
+            <url>http://oss.jfrog.org/artifactory/oss-snapshot-local</url>
+        </repository>
+        <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
+        </repository>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-elpaaso-maven</id>
+            <name>bintray</name>
+            <url>http://dl.bintray.com/elpaaso/maven</url>
+        </repository>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>central</id>
+            <name>bintray</name>
+            <url>http://jcenter.bintray.com</url>
         </repository>
     </repositories>
 

@@ -69,7 +69,7 @@ public class AppConfig {
         if (cloudOrganization == null || cloudSpace == null) {
             return null;
         }
-        logger.debug(String.format("Creating new CloudFoundry client using admin access with org '%s' and space '%s'", cloudOrganization.getName(), cloudSpace.getName()));
+        logger.info(String.format("Creating new CloudFoundry client using admin access with org '%s' and space '%s'", cloudOrganization.getName(), cloudSpace.getName()));
         return cloudFoundryClientFactory.createCloudFoundryClient(this.cfAdminUser, this.cfAdminPassword, this.cloudControllerUrl, cloudOrganization.getName(), cloudSpace.getName());
     }
 
@@ -84,7 +84,7 @@ public class AppConfig {
                 || this.noCloudFoundryAccess) {
             return null;
         }
-        logger.debug("Creating new CloudFoundry client using admin access");
+        logger.info("Creating new CloudFoundry client using admin access");
         return cloudFoundryClientFactory.createCloudFoundryClient(this.cfAdminUser, this.cfAdminPassword, this.cloudControllerUrl);
     }
 

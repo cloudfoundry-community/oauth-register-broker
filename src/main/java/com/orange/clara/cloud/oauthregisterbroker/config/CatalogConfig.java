@@ -3,6 +3,7 @@ package com.orange.clara.cloud.oauthregisterbroker.config;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.orange.clara.cloud.oauthregisterbroker.drivers.Driver;
+import com.orange.clara.cloud.oauthregisterbroker.drivers.TestDriver;
 import com.orange.clara.cloud.oauthregisterbroker.drivers.factory.DriverFactory;
 import org.cloudfoundry.community.servicebroker.model.Catalog;
 import org.cloudfoundry.community.servicebroker.model.Plan;
@@ -26,6 +27,9 @@ import java.util.*;
  */
 @Configuration
 public class CatalogConfig {
+
+    @Value("${use.plan.test:false}")
+    private boolean usePlanTest;
 
     @Value("#{${use.ssl:false} ? 'https://' : 'http://'}${vcap.application.uris[0]:localhost:8080}")
     private String appUri;
@@ -56,6 +60,9 @@ public class CatalogConfig {
     public Map<String, Driver> mapPlanToDriver() {
         Map<String, Driver> planToDrivers = Maps.newHashMap();
         for (Driver driver : this.driverFactory.getDrivers()) {
+            if (driver instanceof TestDriver && !usePlanTest) {
+                continue;
+            }
             planToDrivers.put(this.serviceDefinitionId + "-plan-" + this.getDriverName(driver), driver);
         }
         return planToDrivers;

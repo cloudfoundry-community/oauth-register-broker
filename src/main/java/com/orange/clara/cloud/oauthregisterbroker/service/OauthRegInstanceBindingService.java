@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.Date;
 import java.util.List;
@@ -45,7 +46,7 @@ public class OauthRegInstanceBindingService extends AbstractOauthRegInstance imp
 
     public final static String GRANT_TYPES_PARAMETER = "grant_types";
     public final static String SCOPES_PARAMETER = "scopes";
-    public final static String REDIRECT_PARAMETER = "callback_urls";
+    public final static String REDIRECT_PARAMETER = "callback_url";
     public final static String APP_URIS_PARAMETER = "app_uris";
     @Autowired
     @Qualifier("cloudFoundryClientAsAdmin")
@@ -66,10 +67,12 @@ public class OauthRegInstanceBindingService extends AbstractOauthRegInstance imp
                 request.getBindingId(),
                 request.getServiceDefinitionId(),
                 Maps.newHashMap(),
-                "",
+                null,
                 request.getAppGuid()
         );
-
+        if (request.getAppGuid() == null || request.getAppGuid().isEmpty()) {
+            throw new ServiceBrokerException("You can only bind this service to an app (service keys are not allowed)");
+        }
         if (this.oauthRegServiceInstanceBindingsRepo.exists(request.getBindingId())) {
             throw new ServiceInstanceBindingExistsException(serviceInstanceBinding);
         }
@@ -85,15 +88,24 @@ public class OauthRegInstanceBindingService extends AbstractOauthRegInstance imp
         CloudApplication application = null;
 
         if (this.cloudFoundryClient != null) {
-            this.cloudFoundryClient.getApplication(UUID.fromString(request.getAppGuid()));
+            try {
+                application = this.cloudFoundryClient.getApplication(UUID.fromString(request.getAppGuid()));
+            } catch (Exception e) {
+                throw new ServiceBrokerException("Error during binding: " + e.getMessage(), e);
+            }
+
         } else {
             application = this.generateCloudApplication(request.getAppGuid(), request.getParameters());
         }
+        logger.debug("App found {} with uuid {}", application, request.getAppGuid());
         Driver driver = this.getDriverFromInstance(instance);
         OauthClient oauthClient = null;
         try {
             oauthClient = driver.register(this.getProviderUsername(instance, driver), this.getProviderPassword(instance, driver), application, grantTypes, scopes, redirectPath);
         } catch (Exception e) {
+            if (e.getCause() != null && e.getCause() instanceof HttpClientErrorException) {
+                throw new ServiceBrokerException("Error during binding: " + e.getMessage() + "\nbody response: " + ((HttpClientErrorException) e.getCause()).getResponseBodyAsString(), e);
+            }
             throw new ServiceBrokerException("Error during binding: " + e.getMessage(), e);
         }
         this.oauthRegServiceInstanceBindingsRepo.save(binding);
@@ -106,7 +118,7 @@ public class OauthRegInstanceBindingService extends AbstractOauthRegInstance imp
                 request.getBindingId(),
                 request.getServiceDefinitionId(),
                 this.getCredentials(oauthClient),
-                "",
+                null,
                 request.getAppGuid()
         );
     }
@@ -117,10 +129,10 @@ public class OauthRegInstanceBindingService extends AbstractOauthRegInstance imp
                 request.getBindingId(),
                 request.getServiceId(),
                 Maps.newHashMap(),
-                "",
+                null,
                 ""
         );
-        if (this.oauthRegServiceInstanceBindingsRepo.exists(request.getBindingId())) {
+        if (!this.oauthRegServiceInstanceBindingsRepo.exists(request.getBindingId())) {
             logger.warn("The service instance binding '" + request.getBindingId() + "' doesn't exist. Defaulting to say to cloud controller that binding is deleted.");
             return serviceInstanceBinding;
         }
@@ -134,11 +146,11 @@ public class OauthRegInstanceBindingService extends AbstractOauthRegInstance imp
         );
         OauthRegServiceInstance instance = binding.getOauthRegServiceInstance();
         Driver driver = this.getDriverFromInstance(instance);
-        try {
+        /*try {
             driver.unregister(this.getProviderUsername(instance, driver), this.getProviderPassword(instance, driver), binding.getOauthClient());
         } catch (Exception e) {
             throw new ServiceBrokerException("Error during unbinding: " + e.getMessage(), e);
-        }
+        }*/
 
         this.oauthClientRepo.delete(binding.getOauthClient());
         this.oauthRegServiceInstanceBindingsRepo.delete(binding);

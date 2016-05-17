@@ -109,4 +109,12 @@ public class OauthClient {
     public void setGrantTypes(String grantTypes) {
         this.grantTypes = grantTypes;
     }
+
+    @PreRemove
+    private void preRemove() {
+        if (this.oauthRegServiceInstanceBindings == null) {
+            return;
+        }
+        this.oauthRegServiceInstanceBindings.setOauthClient(null);
+    }
 }

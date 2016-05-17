@@ -143,8 +143,8 @@ databaseChangeLog:
         constraintName: FK_kfe93xoo21rnnf3yk15t4k68d
         deferrable: false
         initiallyDeferred: false
-        onDelete: NO ACTION
-        onUpdate: NO ACTION
+        onDelete: RESTRICT
+        onUpdate: RESTRICT
         referencedColumnNames: id
         referencedTableName: oauth_reg_service_instance_bindings
 - changeSet:

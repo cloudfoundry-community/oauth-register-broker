@@ -1,0 +1,27 @@
+---
+#Generated manifest
+name: oauth-register-broker
+memory: 1G
+instances: 1
+path: ./target/oauth-register-broker-1.0.0.war
+host: oauth-register
+timeout: 180
+env:
+  JAVA_OPTS: -Djava.security.egd=file:///dev/urandom
+  spring_profiles_active: cloud,uaa
+  broker_username: myUs3r
+  broker_password: myPasssw0rd
+  admin_username: my@dmin
+  admin_password: myPasssw0rd
+  cf_admin_user: dbdump3rus3r # user login of a cloudfoundry user for oauth-register
+  cf_admin_password: dbdump3rpassw0rd # user password of a cloudfoundry user for oauth-register
+  use_ssl: false # If you will be on https set this value to true
+  CF_TARGET: https://your.uaa.url.com # url of your uaa (set it if you want to also use uaa)
+  cloud_controller_url: https://your.api.cf.url.com # url of your cloudfoundry api
+  security_oauth2_client_clientId: your-client-id-uaa
+  security_oauth2_client_clientSecret: your-client-secret-uaa
+  skip_ssl_verification: false # if set to true when redirect uris will be forged detections will be also made on self signed certificate
+  service_definition_id: oauth-register
+  encryption_key: PleaseChangeIt_64568sdfs54gr86 # This encryption key is used to encrypt secret and id of services when user povide one
+  global_provider_username_uaa: uaa_user # this is optional if not set broker will ask to user to set the parameter `provider_username` when creating service
+  global_provider_password_uaa: uaa_password # this is optional if not set broker will ask to user to set the parameter `provider_password` when creating service

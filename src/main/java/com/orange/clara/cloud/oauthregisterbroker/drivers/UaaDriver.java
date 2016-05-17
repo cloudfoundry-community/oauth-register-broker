@@ -5,14 +5,17 @@ import com.orange.clara.cloud.oauthregisterbroker.exception.DriverConnectionExce
 import com.orange.clara.cloud.oauthregisterbroker.exception.DriverRegisterException;
 import com.orange.clara.cloud.oauthregisterbroker.exception.DriverUnregisterException;
 import com.orange.clara.cloud.oauthregisterbroker.model.OauthClient;
+import com.orange.clara.cloud.oauthregisterbroker.service.OauthRegInstanceService;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
 import org.cloudfoundry.identity.uaa.api.UaaConnectionFactory;
 import org.cloudfoundry.identity.uaa.api.client.UaaClientOperations;
 import org.cloudfoundry.identity.uaa.api.common.UaaConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
+import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
 import org.springframework.security.oauth2.common.AuthenticationScheme;
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.stereotype.Component;
@@ -38,25 +41,20 @@ public class UaaDriver extends AbstractDriver implements Driver {
     @Qualifier("getUaaUrl")
     protected String uaaUrl;
 
-    @Autowired
-    @Qualifier("getUaaClientId")
-    protected String uaaClientId;
 
-    @Autowired
-    @Qualifier("getUaaClientSecret")
-    protected String uaaClientSecret;
+    private Logger logger = LoggerFactory.getLogger(OauthRegInstanceService.class);
 
     private UaaConnection connect(String providerUser, String providerPassword) throws MalformedURLException, DriverConnectionException {
         if (uaaUrl == null) {
             throw new DriverConnectionException("Uaa is not registered in the broker, this driver can't be used");
         }
-        ResourceOwnerPasswordResourceDetails credentials = new ResourceOwnerPasswordResourceDetails();
+        ClientCredentialsResourceDetails credentials = new ClientCredentialsResourceDetails();
+
+
         credentials.setAccessTokenUri(uaaUrl + "/oauth/token");
         credentials.setClientAuthenticationScheme(AuthenticationScheme.header);
-        credentials.setClientId(uaaClientId);
-        credentials.setClientSecret(uaaClientSecret);
-        credentials.setUsername(providerUser);
-        credentials.setPassword(providerPassword);
+        credentials.setClientId(providerUser);
+        credentials.setClientSecret(providerPassword);
 
         URL uaaHost = new URL(uaaUrl);
         return UaaConnectionFactory.getConnection(uaaHost, credentials);
@@ -111,7 +109,8 @@ public class UaaDriver extends AbstractDriver implements Driver {
 
     private String createUris(CloudApplication app, String redirectPath) {
         List<String> finalUris = Lists.newArrayList();
-        for (String uri : app.getUris()) {
+        List<String> uris = this.getVerifiedUris(app.getUris());
+        for (String uri : uris) {
             finalUris.add(uri + redirectPath);
         }
         return String.join(",", finalUris);

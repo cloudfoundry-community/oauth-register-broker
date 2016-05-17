@@ -30,6 +30,9 @@ public class CryptoConverter implements AttributeConverter<String, String> {
 
     @Override
     public String convertToDatabaseColumn(String password) {
+        if (password == null) {
+            return null;
+        }
         try {
             this.loadKey();
             Key key = new SecretKeySpec(encryptionKey, "AES");
@@ -43,6 +46,9 @@ public class CryptoConverter implements AttributeConverter<String, String> {
 
     @Override
     public String convertToEntityAttribute(String cryptedPassword) {
+        if (cryptedPassword == null) {
+            return null;
+        }
         try {
             this.loadKey();
             Key key = new SecretKeySpec(encryptionKey, "AES");
