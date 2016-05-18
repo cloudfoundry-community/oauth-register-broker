@@ -155,9 +155,15 @@ cf us myapp myprovider
 
 ## Dashboard
 
+### Login
+
 You can go to the dashboard by going on the route of the broker.
 You have multiple way to login:
 
 1. If the admin set the uaa and cloud foundry credentials, users could access through Cloud Foundry login page and registered apps will be filtered by users accessibility on this apps
 2. If the admin set the uaa and **didn't set** cloud foundry credentials, users could access through Cloud Foundry login page and registered apps will **not** be filtered by users accessibility on this apps
 3. If the admin **didn't set** set the uaa and **didn't set** cloud foundry credentials, users could access by basic auth by using `admin_username` and `admin_password` that you can see in `manifest.yml` and registered apps will **not** be filtered by users accessibility on this apps
+
+### Preview:
+
+![Screenshot preview](https://rawgit.com/ArthurHlt/oauth-register-broker/master/src/main/resources/static/images/preview/preview.png)
