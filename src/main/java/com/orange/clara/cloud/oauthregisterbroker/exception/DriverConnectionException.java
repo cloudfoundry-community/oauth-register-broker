@@ -1,5 +1,7 @@
 package com.orange.clara.cloud.oauthregisterbroker.exception;
 
+import com.orange.clara.cloud.oauthregisterbroker.drivers.Driver;
+
 /**
  * Copyright (C) 2016 Orange
  * <p>
@@ -10,13 +12,13 @@ package com.orange.clara.cloud.oauthregisterbroker.exception;
  * Author: Arthur Halet
  * Date: 15/05/2016
  */
-public class DriverConnectionException extends Exception {
+public class DriverConnectionException extends DriverException {
 
-    public DriverConnectionException(String message) {
-        super(message);
+    public DriverConnectionException(Driver driver, String message) {
+        super(driver, "Error during connection:" + message);
     }
 
-    public DriverConnectionException(String message, Throwable cause) {
-        super(message, cause);
+    public DriverConnectionException(Driver driver, String message, Throwable cause) {
+        super(driver, "Error during connection:" + message, cause);
     }
 }

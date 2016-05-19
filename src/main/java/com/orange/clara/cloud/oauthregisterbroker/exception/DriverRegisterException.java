@@ -1,5 +1,7 @@
 package com.orange.clara.cloud.oauthregisterbroker.exception;
 
+import com.orange.clara.cloud.oauthregisterbroker.drivers.Driver;
+
 /**
  * Copyright (C) 2016 Orange
  * <p>
@@ -10,13 +12,14 @@ package com.orange.clara.cloud.oauthregisterbroker.exception;
  * Author: Arthur Halet
  * Date: 15/05/2016
  */
-public class DriverRegisterException extends Exception {
+public class DriverRegisterException extends DriverException {
 
-    public DriverRegisterException(String message) {
-        super(message);
+
+    public DriverRegisterException(Driver driver, String message) {
+        super(driver, message);
     }
 
-    public DriverRegisterException(String message, Throwable cause) {
-        super(message, cause);
+    public DriverRegisterException(Driver driver, String message, Throwable cause) {
+        super(driver, message, cause);
     }
 }

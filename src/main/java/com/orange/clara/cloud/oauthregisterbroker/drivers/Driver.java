@@ -1,8 +1,8 @@
 package com.orange.clara.cloud.oauthregisterbroker.drivers;
 
-import com.orange.clara.cloud.oauthregisterbroker.exception.DriverRegisterException;
-import com.orange.clara.cloud.oauthregisterbroker.exception.DriverUnregisterException;
+import com.orange.clara.cloud.oauthregisterbroker.exception.DriverException;
 import com.orange.clara.cloud.oauthregisterbroker.model.OauthClient;
+import com.orange.clara.cloud.oauthregisterbroker.model.ProviderInformation;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
 
 import java.util.List;
@@ -20,9 +20,9 @@ import java.util.List;
 //authorization_code
 public interface Driver {
 
-    OauthClient register(String providerUser, String providerPassword, CloudApplication app, List<String> grantTypes, List<String> scopes, String redirectPath) throws DriverRegisterException;
+    OauthClient register(ProviderInformation providerInformation, CloudApplication app, List<String> grantTypes, List<String> scopes, String redirectPath) throws DriverException;
 
-    void unregister(String providerUser, String providerPassword, OauthClient oauthClient) throws DriverUnregisterException;
+    void unregister(ProviderInformation providerInformation, OauthClient oauthClient) throws DriverException;
 
     String getDriverName();
 }

@@ -1,11 +1,12 @@
-package com.orange.clara.cloud.oauthregisterbroker.drivers;
+package com.orange.clara.cloud.oauthregisterbroker.drivers.uaa;
 
 import com.google.common.collect.Lists;
+import com.orange.clara.cloud.oauthregisterbroker.drivers.AbstractDriver;
+import com.orange.clara.cloud.oauthregisterbroker.drivers.Driver;
 import com.orange.clara.cloud.oauthregisterbroker.exception.DriverConnectionException;
-import com.orange.clara.cloud.oauthregisterbroker.exception.DriverRegisterException;
-import com.orange.clara.cloud.oauthregisterbroker.exception.DriverUnregisterException;
+import com.orange.clara.cloud.oauthregisterbroker.exception.DriverException;
 import com.orange.clara.cloud.oauthregisterbroker.model.OauthClient;
-import com.orange.clara.cloud.oauthregisterbroker.service.OauthRegInstanceService;
+import com.orange.clara.cloud.oauthregisterbroker.model.ProviderInformation;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
 import org.cloudfoundry.identity.uaa.api.UaaConnectionFactory;
 import org.cloudfoundry.identity.uaa.api.client.UaaClientOperations;
@@ -42,11 +43,11 @@ public class UaaDriver extends AbstractDriver implements Driver {
     protected String uaaUrl;
 
 
-    private Logger logger = LoggerFactory.getLogger(OauthRegInstanceService.class);
+    private Logger logger = LoggerFactory.getLogger(UaaDriver.class);
 
-    private UaaConnection connect(String providerUser, String providerPassword) throws MalformedURLException, DriverConnectionException {
+    private UaaConnection connect(String providerUser, String providerPassword) throws DriverConnectionException {
         if (uaaUrl == null) {
-            throw new DriverConnectionException("Uaa is not registered in the broker, this driver can't be used");
+            throw new DriverConnectionException(this, "Uaa is not registered in the broker, this driver can't be used");
         }
         ClientCredentialsResourceDetails credentials = new ClientCredentialsResourceDetails();
 
@@ -56,18 +57,19 @@ public class UaaDriver extends AbstractDriver implements Driver {
         credentials.setClientId(providerUser);
         credentials.setClientSecret(providerPassword);
 
-        URL uaaHost = new URL(uaaUrl);
+        URL uaaHost = null;
+        try {
+            uaaHost = new URL(uaaUrl);
+        } catch (MalformedURLException e) {
+            throw new DriverConnectionException(this, e.getMessage(), e);
+        }
         return UaaConnectionFactory.getConnection(uaaHost, credentials);
     }
 
     @Override
-    public OauthClient register(String providerUser, String providerPassword, CloudApplication app, List<String> grantTypes, List<String> scopes, String redirectPath) throws DriverRegisterException {
+    public OauthClient register(ProviderInformation providerInformation, CloudApplication app, List<String> grantTypes, List<String> scopes, String redirectPath) throws DriverException {
         UaaConnection connection = null;
-        try {
-            connection = this.connect(providerUser, providerPassword);
-        } catch (Exception e) {
-            throw new DriverRegisterException("Error during connection:" + e.getMessage(), e);
-        }
+        connection = this.connect(providerInformation.getUsername(), providerInformation.getPassword());
         UaaClientOperations clientOperations = connection.clientOperations();
         BaseClientDetails clientDetails = new BaseClientDetails(
                 this.createClientId(app),
@@ -81,6 +83,8 @@ public class UaaDriver extends AbstractDriver implements Driver {
         clientOperations.create(clientDetails);
         return new OauthClient(
                 clientDetails.getClientId(),
+                app.getName(),
+                clientDetails.getClientId(),
                 clientDetails.getClientSecret(),
                 uaaUrl + "/oauth/token",
                 uaaUrl + "/oauth/authorize",
@@ -91,15 +95,11 @@ public class UaaDriver extends AbstractDriver implements Driver {
     }
 
     @Override
-    public void unregister(String providerUser, String providerPassword, OauthClient oauthClient) throws DriverUnregisterException {
+    public void unregister(ProviderInformation providerInformation, OauthClient oauthClient) throws DriverException {
         UaaConnection connection = null;
-        try {
-            connection = this.connect(providerUser, providerPassword);
-        } catch (Exception e) {
-            throw new DriverUnregisterException("Error during connection:" + e.getMessage(), e);
-        }
+        connection = this.connect(providerInformation.getUsername(), providerInformation.getPassword());
         UaaClientOperations clientOperations = connection.clientOperations();
-        clientOperations.delete(oauthClient.getId());
+        clientOperations.delete(oauthClient.getClientId());
     }
 
     @Override

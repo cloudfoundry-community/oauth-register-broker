@@ -3,7 +3,9 @@
 Automatically register a Cloud Foundry app to an oauth2 provider.
 
 Currently supported drivers:
+
 - uaa
+- Github (**Note**: support two factors authentication)
 
 ## Requirements
 

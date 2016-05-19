@@ -1,8 +1,8 @@
 package com.orange.clara.cloud.oauthregisterbroker.drivers;
 
-import com.orange.clara.cloud.oauthregisterbroker.exception.DriverRegisterException;
-import com.orange.clara.cloud.oauthregisterbroker.exception.DriverUnregisterException;
+import com.orange.clara.cloud.oauthregisterbroker.exception.DriverException;
 import com.orange.clara.cloud.oauthregisterbroker.model.OauthClient;
+import com.orange.clara.cloud.oauthregisterbroker.model.ProviderInformation;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -23,9 +23,13 @@ import java.util.UUID;
 @Component
 @Order(2)
 public class TestDriver implements Driver {
+
+
     @Override
-    public OauthClient register(String providerUser, String providerPassword, CloudApplication app, List<String> grantTypes, List<String> scopes, String redirectPath) throws DriverRegisterException {
+    public OauthClient register(ProviderInformation providerInformation, CloudApplication app, List<String> grantTypes, List<String> scopes, String redirectPath) throws DriverException {
         return new OauthClient(
+                UUID.randomUUID().toString(),
+                app.getName(),
                 UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(),
                 "http://test.com/oauth/token",
@@ -37,7 +41,7 @@ public class TestDriver implements Driver {
     }
 
     @Override
-    public void unregister(String providerUser, String providerPassword, OauthClient oauthClient) throws DriverUnregisterException {
+    public void unregister(ProviderInformation providerInformation, OauthClient oauthClient) throws DriverException {
 
     }
 

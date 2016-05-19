@@ -24,8 +24,9 @@ public class OauthClient {
     private String userAuthorizationUri;
     private String userInfoUri;
     private String scopes;
-
     private String grantTypes;
+    private String appName;
+    private String clientId;
 
     @OneToOne
     @JoinColumn(name = "oauth_reg_service_instance_bindings_id")
@@ -35,7 +36,7 @@ public class OauthClient {
 
     }
 
-    public OauthClient(String id, String secret, String accessTokenUri, String userAuthorizationUri, String userInfoUri, String scopes, String grantTypes) {
+    public OauthClient(String id, String appName, String clientId, String secret, String accessTokenUri, String userAuthorizationUri, String userInfoUri, String scopes, String grantTypes) {
         this.secret = secret;
         this.id = id;
         this.accessTokenUri = accessTokenUri;
@@ -43,6 +44,8 @@ public class OauthClient {
         this.userInfoUri = userInfoUri;
         this.scopes = scopes;
         this.grantTypes = grantTypes;
+        this.appName = appName;
+        this.clientId = clientId;
     }
 
     public OauthRegServiceInstanceBindings getOauthRegServiceInstanceBindings() {
@@ -108,6 +111,37 @@ public class OauthClient {
 
     public void setGrantTypes(String grantTypes) {
         this.grantTypes = grantTypes;
+    }
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    @Override
+    public String toString() {
+        return "OauthClient{" +
+                "clientId='" + clientId + '\'' +
+                ", appName='" + appName + '\'' +
+                ", grantTypes='" + grantTypes + '\'' +
+                ", scopes='" + scopes + '\'' +
+                ", userInfoUri='" + userInfoUri + '\'' +
+                ", userAuthorizationUri='" + userAuthorizationUri + '\'' +
+                ", accessTokenUri='" + accessTokenUri + '\'' +
+                ", secret='" + secret + '\'' +
+                ", id='" + id + '\'' +
+                '}';
     }
 
     @PreRemove

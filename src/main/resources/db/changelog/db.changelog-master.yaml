@@ -161,4 +161,28 @@ databaseChangeLog:
         onUpdate: NO ACTION
         referencedColumnNames: service_instance_id
         referencedTableName: oauth_reg_service_instance
-
+- changeSet:
+    id: 1463664233000-1
+    author: arthurhalet
+    changes:
+    - addColumn:
+        tableName: oauth_reg_service_instance
+        columns:
+        - column:
+            name: authentication_code
+            type: varchar(255)
+            constraints:
+              nullable: true
+    - addColumn:
+        tableName: oauth_client
+        columns:
+        - column:
+            name: client_id
+            type: varchar(255)
+            constraints:
+              nullable: true
+        - column:
+            name: app_name
+            type: varchar(255)
+            constraints:
+              nullable: true

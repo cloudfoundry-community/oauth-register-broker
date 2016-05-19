@@ -33,6 +33,7 @@ public class OauthRegInstanceService extends AbstractOauthRegInstance implements
 
     public final static String PROVIDER_USERNAME_PARAMETER = "provider_username";
     public final static String PROVIDER_PASSWORD_PARAMETER = "provider_password";
+    public final static String AUTHENTICATION_CODE_PARAMETER = "authentication_code";
 
     @Autowired
     @Qualifier("appUri")
@@ -57,7 +58,8 @@ public class OauthRegInstanceService extends AbstractOauthRegInstance implements
         if (!this.manageGlobalProvider.hasGlobalProviderConfig(driver)) {
             this.loadLoginProviderToInstance(request.getParameters(), instance);
         }
-
+        String authenticationCode = this.getParameter(request.getParameters(), AUTHENTICATION_CODE_PARAMETER, null);
+        instance.setAuthenticationCode(authenticationCode);
         this.oauthRegServiceInstanceRepo.save(instance);
         return serviceInstance;
     }
@@ -110,6 +112,8 @@ public class OauthRegInstanceService extends AbstractOauthRegInstance implements
         if (password != null) {
             instance.setProviderPassword(password);
         }
+        String authenticationCode = this.getParameter(request.getParameters(), AUTHENTICATION_CODE_PARAMETER, null);
+        instance.setAuthenticationCode(authenticationCode);
         this.oauthRegServiceInstanceRepo.save(instance);
         return serviceInstance;
     }

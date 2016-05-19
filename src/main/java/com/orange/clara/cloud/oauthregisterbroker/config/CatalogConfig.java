@@ -6,6 +6,7 @@ import com.orange.clara.cloud.oauthregisterbroker.drivers.Driver;
 import com.orange.clara.cloud.oauthregisterbroker.drivers.TestDriver;
 import com.orange.clara.cloud.oauthregisterbroker.drivers.factory.DriverFactory;
 import org.cloudfoundry.community.servicebroker.model.Catalog;
+import org.cloudfoundry.community.servicebroker.model.DashboardClient;
 import org.cloudfoundry.community.servicebroker.model.Plan;
 import org.cloudfoundry.community.servicebroker.model.ServiceDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,12 @@ public class CatalogConfig {
     @Value("${use.plan.test:false}")
     private boolean usePlanTest;
 
+    @Value("${security.oauth2.client.clientSecret:fakeClientSecret}")
+    private String clientSecret;
+
+    @Value("${security.oauth2.client.clientId:fakeClientId}")
+    private String clientId;
+
     @Value("#{${use.ssl:false} ? 'https://' : 'http://'}${vcap.application.uris[0]:localhost:8080}")
     private String appUri;
 
@@ -46,14 +53,18 @@ public class CatalogConfig {
                 new ServiceDefinition(
                         serviceDefinitionId,
                         serviceDefinitionId,
-                        "A simple MongoDB service broker implementation",
+                        "Automatically register a Cloud Foundry app to an oauth2 provider",
                         true,
                         false,
                         this.getPlans(),
                         Arrays.asList("oauth", "sso"),
                         getServiceDefinitionMetadata(),
                         null,
-                        null)));
+                        this.getDashboardClient())));
+    }
+
+    private DashboardClient getDashboardClient() {
+        return new DashboardClient(this.clientId, this.clientSecret, this.appUri + "/login");
     }
 
     @Bean

@@ -5,6 +5,7 @@ import com.orange.clara.cloud.oauthregisterbroker.drivers.Driver;
 import com.orange.clara.cloud.oauthregisterbroker.model.OauthClient;
 import com.orange.clara.cloud.oauthregisterbroker.model.OauthRegServiceInstance;
 import com.orange.clara.cloud.oauthregisterbroker.model.OauthRegServiceInstanceBindings;
+import com.orange.clara.cloud.oauthregisterbroker.model.ProviderInformation;
 import com.orange.clara.cloud.oauthregisterbroker.repo.OauthClientRepo;
 import com.orange.clara.cloud.oauthregisterbroker.repo.OauthRegServiceInstanceBindingsRepo;
 import com.orange.clara.cloud.oauthregisterbroker.repo.OauthRegServiceInstanceRepo;
@@ -101,7 +102,8 @@ public class OauthRegInstanceBindingService extends AbstractOauthRegInstance imp
         Driver driver = this.getDriverFromInstance(instance);
         OauthClient oauthClient = null;
         try {
-            oauthClient = driver.register(this.getProviderUsername(instance, driver), this.getProviderPassword(instance, driver), application, grantTypes, scopes, redirectPath);
+            ProviderInformation providerInformation = new ProviderInformation(this.getProviderUsername(instance, driver), this.getProviderPassword(instance, driver), instance.getAuthenticationCode());
+            oauthClient = driver.register(providerInformation, application, grantTypes, scopes, redirectPath);
         } catch (Exception e) {
             if (e.getCause() != null && e.getCause() instanceof HttpClientErrorException) {
                 throw new ServiceBrokerException("Error during binding: " + e.getMessage() + "\nbody response: " + ((HttpClientErrorException) e.getCause()).getResponseBodyAsString(), e);
@@ -146,11 +148,12 @@ public class OauthRegInstanceBindingService extends AbstractOauthRegInstance imp
         );
         OauthRegServiceInstance instance = binding.getOauthRegServiceInstance();
         Driver driver = this.getDriverFromInstance(instance);
-        /*try {
-            driver.unregister(this.getProviderUsername(instance, driver), this.getProviderPassword(instance, driver), binding.getOauthClient());
+        try {
+            ProviderInformation providerInformation = new ProviderInformation(this.getProviderUsername(instance, driver), this.getProviderPassword(instance, driver), instance.getAuthenticationCode());
+            driver.unregister(providerInformation, binding.getOauthClient());
         } catch (Exception e) {
             throw new ServiceBrokerException("Error during unbinding: " + e.getMessage(), e);
-        }*/
+        }
 
         this.oauthClientRepo.delete(binding.getOauthClient());
         this.oauthRegServiceInstanceBindingsRepo.delete(binding);
@@ -171,7 +174,7 @@ public class OauthRegInstanceBindingService extends AbstractOauthRegInstance imp
 
     protected Map<String, Object> getCredentials(OauthClient oauthClient) {
         Map<String, Object> credentials = Maps.newHashMap();
-        credentials.put("client_id", oauthClient.getId());
+        credentials.put("client_id", oauthClient.getClientId());
         credentials.put("client_secret", oauthClient.getSecret());
         credentials.put("access_token_uri", oauthClient.getAccessTokenUri());
         credentials.put("user_authorization_uri", oauthClient.getUserAuthorizationUri());

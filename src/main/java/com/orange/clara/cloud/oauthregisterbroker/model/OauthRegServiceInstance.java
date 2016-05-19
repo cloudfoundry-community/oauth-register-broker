@@ -31,7 +31,8 @@ public class OauthRegServiceInstance {
     private String providerUsername;
     @Convert(converter = CryptoConverter.class)
     private String providerPassword;
-
+    @Convert(converter = CryptoConverter.class)
+    private String authenticationCode;
     @OneToMany(mappedBy = "oauthRegServiceInstance")
     private List<OauthRegServiceInstanceBindings> oauthRegServiceInstanceBindings;
 
@@ -46,6 +47,11 @@ public class OauthRegServiceInstance {
         this.organizationGuid = organizationGuid;
         this.spaceGuid = spaceGuid;
         this.dashboardUrl = dashboardUrl;
+    }
+
+    public OauthRegServiceInstance(String serviceInstanceId, String planId, String organizationGuid, String spaceGuid, String dashboardUrl, String authenticationCode) {
+        this(serviceInstanceId, planId, organizationGuid, spaceGuid, dashboardUrl);
+        this.authenticationCode = authenticationCode;
     }
 
     public void addOauthRegServiceInstanceBinding(OauthRegServiceInstanceBindings oauthRegServiceInstanceBindings) {
@@ -107,6 +113,10 @@ public class OauthRegServiceInstance {
         return oauthRegServiceInstanceBindings;
     }
 
+    public void setOauthRegServiceInstanceBindings(List<OauthRegServiceInstanceBindings> oauthRegServiceInstanceBindings) {
+        this.oauthRegServiceInstanceBindings = oauthRegServiceInstanceBindings;
+    }
+
     public String getProviderUsername() {
         return providerUsername;
     }
@@ -123,7 +133,11 @@ public class OauthRegServiceInstance {
         this.providerPassword = providerPassword;
     }
 
-    public void setOauthRegServiceInstanceBindings(List<OauthRegServiceInstanceBindings> oauthRegServiceInstanceBindings) {
-        this.oauthRegServiceInstanceBindings = oauthRegServiceInstanceBindings;
+    public String getAuthenticationCode() {
+        return authenticationCode;
+    }
+
+    public void setAuthenticationCode(String authenticationCode) {
+        this.authenticationCode = authenticationCode;
     }
 }
