@@ -29,17 +29,17 @@ The broker will register his app to the oauth provider and will give this json (
   "oauth-register": [
    {
     "credentials": {
-     "access_token_uri": "https://uaa.api.net/oauth/token",
-     "client_id": "myclient-niKO6CJSKQ8NM7",
-     "client_secret": "KSJLKF5s45e",
-     "grant_types": [
+     "tokenUri": "https://uaa.api.net/oauth/token",
+     "clientId": "myclient-niKO6CJSKQ8NM7",
+     "clientSecret": "KSJLKF5s45e",
+     "grantTypes": [
       "authorization_code"
      ],
      "scopes": [
       "openid"
      ],
-     "user_authorization_uri": "https://uaa.api.net/oauth/authorize",
-     "user_info_uri": "https://uaa.api.net/userinfo"
+     "authorizationUri": "https://uaa.api.net/oauth/authorize",
+     "userInfoUri": "https://uaa.api.net/userinfo"
     },
     "label": "oauth-register-dev",
     "name": "myoauth",

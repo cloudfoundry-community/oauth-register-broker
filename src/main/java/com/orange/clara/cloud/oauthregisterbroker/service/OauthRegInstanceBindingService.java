@@ -174,13 +174,13 @@ public class OauthRegInstanceBindingService extends AbstractOauthRegInstance imp
 
     protected Map<String, Object> getCredentials(OauthClient oauthClient) {
         Map<String, Object> credentials = Maps.newHashMap();
-        credentials.put("client_id", oauthClient.getClientId());
-        credentials.put("client_secret", oauthClient.getSecret());
-        credentials.put("access_token_uri", oauthClient.getAccessTokenUri());
-        credentials.put("user_authorization_uri", oauthClient.getUserAuthorizationUri());
-        credentials.put("user_info_uri", oauthClient.getUserInfoUri());
+        credentials.put("clientId", oauthClient.getClientId());
+        credentials.put("clientSecret", oauthClient.getSecret());
+        credentials.put("tokenUri", oauthClient.getAccessTokenUri());
+        credentials.put("authorizationUri", oauthClient.getUserAuthorizationUri());
+        credentials.put("userInfoUri", oauthClient.getUserInfoUri());
         credentials.put("scopes", this.stringWithCommaToList(oauthClient.getScopes()));
-        credentials.put("grant_types", this.stringWithCommaToList(oauthClient.getGrantTypes()));
+        credentials.put("grantTypes", this.stringWithCommaToList(oauthClient.getGrantTypes()));
         return credentials;
     }
 }
