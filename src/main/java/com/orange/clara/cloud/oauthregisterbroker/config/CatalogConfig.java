@@ -64,7 +64,8 @@ public class CatalogConfig {
     }
 
     private DashboardClient getDashboardClient() {
-        return new DashboardClient(this.clientId, this.clientSecret, this.appUri + "/login");
+        //return new DashboardClient(this.clientId, this.clientSecret, this.appUri + "/login");
+        return null;
     }
 
     @Bean
