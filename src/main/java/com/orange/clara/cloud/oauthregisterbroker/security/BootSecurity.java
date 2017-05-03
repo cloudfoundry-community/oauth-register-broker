@@ -40,19 +40,8 @@ public class BootSecurity {
         Files.write(key, encryptionKeyFile);
     }
 
-    public void removeEncryptionRestriction() {
-        try {
-            Field field = Class.forName("javax.crypto.JceSecurity").getDeclaredField("isRestricted");
-            field.setAccessible(true);
-            field.set(null, java.lang.Boolean.FALSE);
-        } catch (ClassNotFoundException | NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @PostConstruct
     public void runSequence() {
-        this.removeEncryptionRestriction();
         try {
             this.fillEncryptionKeyFile();
         } catch (Exception e) {
