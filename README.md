@@ -6,6 +6,7 @@ Currently supported drivers:
 
 - uaa
 - Github (**Note**: support two factors authentication)
+- PingFederate
 
 ## Requirements
 
@@ -58,7 +59,7 @@ The broker will register his app to the oauth provider and will give this json (
 
 ## Installation in 5 Minutes
 
-1. clone this repo: `git clone https://github.com/ArthurHlt/oauth-register-broker.git && cd oauth-register-broker`
+1. clone this repo: `git clone https://github.com/cloudfoundry-community/oauth-register-broker.git && cd oauth-register-broker`
 2. build the app by running `mvn install`
 3. Create a database service instance in your cloud foundry instance (e.g for [p-mysql](http://docs.pivotal.io/p-mysql/): `cf cs p-mysql 100mb mysql-db-dumper-service`)
 4. Update the manifest (*manifest.yml*) (**Note**: If you don't want to use uaa to login into dashboard, remove *uaa* profile in `spring_profiles_active`
@@ -169,3 +170,10 @@ You have multiple way to login:
 ### Preview:
 
 ![Screenshot preview](https://rawgit.com/ArthurHlt/oauth-register-broker/master/src/main/resources/static/images/preview/preview.png)
+
+## PingFederate
+
+By default, authorization approval is bypassed, because Pingfederate is mostly used in B2E contexts.
+This may be configurable in a future release.
+
+As soon as the oauth client is created in PingFederate administration cluster, a replication request is sent, so that you can use it directly.
