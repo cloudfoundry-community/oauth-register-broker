@@ -23,6 +23,7 @@ public class OauthClient {
     private String accessTokenUri;
     private String userAuthorizationUri;
     private String userInfoUri;
+    private String logoutUri;
     private String scopes;
     private String grantTypes;
     private String appName;
@@ -97,7 +98,15 @@ public class OauthClient {
         this.userInfoUri = userInfoUri;
     }
 
-    public String getScopes() {
+    public String getLogoutUri() {
+		return logoutUri;
+	}
+
+	public void setLogoutUri(String logoutUri) {
+		this.logoutUri = logoutUri;
+	}
+
+	public String getScopes() {
         return scopes;
     }
 
@@ -139,6 +148,7 @@ public class OauthClient {
                 ", userInfoUri='" + userInfoUri + '\'' +
                 ", userAuthorizationUri='" + userAuthorizationUri + '\'' +
                 ", accessTokenUri='" + accessTokenUri + '\'' +
+                ", logoutUri='" + logoutUri + '\'' +
                 ", secret='" + secret + '\'' +
                 ", id='" + id + '\'' +
                 '}';

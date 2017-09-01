@@ -39,7 +39,7 @@ import com.orange.clara.cloud.oauthregisterbroker.exception.DriverException;
 public class PingFederateConnector {
 	
 	@Autowired
-	private String pingApiUrl;
+	private String pingApiUri;
     
     private Logger logger = LoggerFactory.getLogger(PingFederateConnector.class);
     private static final String PINGFEDERATE_REPLICATION_ENDPOINT = "/cluster/replicate";
@@ -67,8 +67,8 @@ public class PingFederateConnector {
 
         RestTemplate restTemplate = new RestTemplate();
         try {
-        	logger.debug(pingApiUrl + PINGFEDERATE_OAUTH_CLIENTS_ENDPOINT);
-        	restTemplate.postForObject(pingApiUrl + PINGFEDERATE_OAUTH_CLIENTS_ENDPOINT, requestEntity, PingFederateOauthClient.class);
+        	logger.debug(pingApiUri + PINGFEDERATE_OAUTH_CLIENTS_ENDPOINT);
+        	restTemplate.postForObject(pingApiUri + PINGFEDERATE_OAUTH_CLIENTS_ENDPOINT, requestEntity, PingFederateOauthClient.class);
         }
         catch(HttpClientErrorException e) {
         	logger.error(e.getStatusCode().toString() + ":" + e.getResponseBodyAsString());
@@ -87,8 +87,8 @@ public class PingFederateConnector {
 	    
 	    HttpEntity<String> entity = new HttpEntity<String>(headers);
 	    try {
-	    	logger.debug(pingApiUrl + PINGFEDERATE_OAUTH_CLIENTS_ENDPOINT_DELETE);
-	    	ResponseEntity<String> result = restTemplate.exchange(pingApiUrl + PINGFEDERATE_OAUTH_CLIENTS_ENDPOINT_DELETE, HttpMethod.DELETE, entity, String.class, params);
+	    	logger.debug(pingApiUri + PINGFEDERATE_OAUTH_CLIENTS_ENDPOINT_DELETE);
+	    	ResponseEntity<String> result = restTemplate.exchange(pingApiUri + PINGFEDERATE_OAUTH_CLIENTS_ENDPOINT_DELETE, HttpMethod.DELETE, entity, String.class, params);
 	    }
 	    catch(HttpClientErrorException e) {
         	logger.error(e.getStatusCode().toString() + ":" + e.getResponseBodyAsString());
@@ -103,8 +103,8 @@ public class PingFederateConnector {
 		
         RestTemplate restTemplate = new RestTemplate();
         try {
-        	logger.debug(pingApiUrl + PINGFEDERATE_REPLICATION_ENDPOINT);
-        	restTemplate.postForObject(pingApiUrl + PINGFEDERATE_REPLICATION_ENDPOINT, requestEntity, APiResult.class);
+        	logger.debug(pingApiUri + PINGFEDERATE_REPLICATION_ENDPOINT);
+        	restTemplate.postForObject(pingApiUri + PINGFEDERATE_REPLICATION_ENDPOINT, requestEntity, APiResult.class);
         }
         catch(HttpClientErrorException e) {
         	logger.error(e.getStatusCode().toString() + ":" + e.getResponseBodyAsString());

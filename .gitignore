@@ -1,3 +1,9 @@
 /target
 /testing
 /orange-manifest.yml
+/bin
+.classpath
+.factorypath
+.project
+manifest-*
+.settings

@@ -17,14 +17,46 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class PingFederateConfig {
 	
-	@Value("${ping.api.url:#{null}}")
-	private String pingApiUrl;
+	@Value("${ping.api.uri:#{null}}")
+	private String pingApiUri;
+	
+	@Value("${ping.access.token.uri:#{null}}")
+	private String pingAccessTokenUri;
+	
+	@Value("${ping.user.authorization.uri:#{null}}")
+	private String pingUserAuthorizationUri;
+	
+	@Value("${ping.user.info.uri:#{null}}")
+	private String pingUserInfoUri;
+	
+	@Value("${ping.logout.uri:#{null}}")
+	private String pingLogoutUri;
 
 	@Bean
-    public String pingApiUrl() {
-        return pingApiUrl;
+    public String pingApiUri() {
+        return pingApiUri;
     }
-	 
+	
+	@Bean
+    public String pingAccessTokenUri() {
+        return pingAccessTokenUri;
+    }
+	
+	@Bean
+    public String pingUserAuthorizationUri() {
+        return pingUserAuthorizationUri;
+    }
+	
+	@Bean
+    public String pingUserInfoUri() {
+        return pingUserInfoUri;
+    }
+	
+	@Bean
+    public String pingLogoutUri() {
+        return pingLogoutUri;
+    }
+	
 }
 
 

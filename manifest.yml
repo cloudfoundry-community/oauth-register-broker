@@ -27,5 +27,5 @@ env:
   global_provider_password_uaa: uaa_password # this is optional if not set broker will ask to user to set the parameter `provider_password` when creating service
   global_provider_username_pingfederate: ping_user # this is optional if not set broker will ask to user to set the parameter `provider_username` when creating service
   global_provider_password_pingfederate: ping_password # this is optional if not set broker will ask to user to set the parameter `provider_password` when creating service
-  ping_api_url: https://myping.mydomain.com/pf-admin-api/v1 # url of your ping api
+  ping_api_uri: https://myping.mydomain.com/pf-admin-api/v1 # url of your ping api
   TRUST_CERTS: myping.mydomain.com:443 # set this to trust your internal pki if needed

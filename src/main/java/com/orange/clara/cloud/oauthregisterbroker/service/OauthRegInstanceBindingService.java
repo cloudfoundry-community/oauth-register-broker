@@ -92,7 +92,7 @@ public class OauthRegInstanceBindingService extends AbstractOauthRegInstance imp
             try {
                 application = this.cloudFoundryClient.getApplication(UUID.fromString(request.getAppGuid()));
             } catch (Exception e) {
-                throw new ServiceBrokerException("Error during binding: " + e.getMessage(), e);
+                throw new ServiceBrokerException("Error during binding (getApplication): " + e.getMessage(), e);
             }
 
         } else {
@@ -179,6 +179,7 @@ public class OauthRegInstanceBindingService extends AbstractOauthRegInstance imp
         credentials.put("tokenUri", oauthClient.getAccessTokenUri());
         credentials.put("authorizationUri", oauthClient.getUserAuthorizationUri());
         credentials.put("userInfoUri", oauthClient.getUserInfoUri());
+        credentials.put("logoutUri", oauthClient.getLogoutUri());
         credentials.put("scopes", this.stringWithCommaToList(oauthClient.getScopes()));
         credentials.put("grantTypes", this.stringWithCommaToList(oauthClient.getGrantTypes()));
         return credentials;
