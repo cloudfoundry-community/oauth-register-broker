@@ -2,6 +2,7 @@ package com.orange.clara.cloud.oauthregisterbroker.drivers.pingfederate;
 
 import com.orange.clara.cloud.oauthregisterbroker.drivers.AbstractDriver;
 import com.orange.clara.cloud.oauthregisterbroker.drivers.Driver;
+import com.orange.clara.cloud.oauthregisterbroker.drivers.github.GithubConnector;
 import com.orange.clara.cloud.oauthregisterbroker.exception.DriverException;
 import com.orange.clara.cloud.oauthregisterbroker.exception.DriverRegisterException;
 import com.orange.clara.cloud.oauthregisterbroker.exception.DriverUnregisterException;
@@ -34,6 +35,18 @@ public class PingFederateDriver extends AbstractDriver implements Driver {
     @Autowired
     private PingFederateConnector pingFederateConnector;
     
+    @Autowired
+    private String pingAccessTokenUri;
+    
+    @Autowired
+    private String pingUserAuthorizationUri;
+    
+    @Autowired
+    private String pingUserInfoUri;
+    
+    @Autowired
+	private String pingLogoutUri;
+    
     private Logger logger = LoggerFactory.getLogger(PingFederateDriver.class);
 
     @Override
@@ -49,6 +62,10 @@ public class PingFederateDriver extends AbstractDriver implements Driver {
         oauthClient.setAppName("client_" + app.getName() + "_" + app.getSpace().getName());
         oauthClient.setScopes(String.join(",", scopes));
         oauthClient.setGrantTypes(String.join(",", grantTypes).toUpperCase());
+        oauthClient.setAccessTokenUri(pingAccessTokenUri);
+        oauthClient.setUserAuthorizationUri(pingUserAuthorizationUri);
+        oauthClient.setUserInfoUri(pingUserInfoUri);
+        oauthClient.setLogoutUri(pingLogoutUri);
         
         /*
          * Creation of full callback urls

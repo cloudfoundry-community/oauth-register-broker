@@ -186,3 +186,15 @@ databaseChangeLog:
             type: varchar(255)
             constraints:
               nullable: true
+- changeSet:
+    id: 1503987505000-1
+    author: jeromedjebari
+    changes:
+    - addColumn:
+        tableName: oauth_client
+        columns:
+        - column:
+            name: logout_uri
+            type: varchar(255)
+            constraints:
+              nullable: true

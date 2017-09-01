@@ -177,3 +177,10 @@ By default, authorization approval is bypassed, because Pingfederate is mostly u
 This may be configurable in a future release.
 
 As soon as the oauth client is created in PingFederate administration cluster, a replication request is sent, so that you can use it directly.
+
+You can set your PingFederate endpoints with the following variables in *manifest.yml* :
+- `ping_api_uri (ex: https://mypingadm.mydomain.com/pf-admin-api/v1)`
+- `ping_access_token_uri (ex: https://mypingidp.mydomain.com/as/token.oauth2)`
+- `ping_user_authorization_uri (ex: https://mypingidp.mydomain.com/as/authorization.oauth2)`
+- `ping_user_info_uri (ex: https://mypingidp.mydomain.com/idp/userinfo.openid)`
+- `ping_logout_uri (ex: https://mypingidp.mydomain.com/idp/startSLO.ping)`
